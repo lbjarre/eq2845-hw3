@@ -18,10 +18,20 @@ def markov_chain(a, b, size):
 
 
 def runlength_code(string):
-    startval = string[0]
-    ret_array = np.array([startval])
-    for _, g in groupby(string):
-        ret_array = np.append(ret_array, sum(1 for _ in g))
+
+    def runlength_generator(string):
+        s_prev = None
+        counter = 1
+        for s in string:
+            if s == s_prev:
+                counter += 1
+            else:
+                yield counter
+                counter = 1 
+                s_prev = s
+
+    ret_array = np.array(string[0])
+    ret_array = np.append(ret_array, [l for l in runlength_generator(string)])
     return ret_array
 
 markov = markov_chain(0.2, 0.2, 19600)
