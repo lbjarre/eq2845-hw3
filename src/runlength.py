@@ -4,8 +4,6 @@ import math
 from functools import reduce
 from collections import Counter
 import numpy as np
-from markov_source import markov_chain
-
 
 def runlength(string):
 
@@ -26,15 +24,8 @@ def runlength(string):
     return ret_array
 
 def optimal_bin_code(string):
-    optimal_len = lambda p: math.ceil(math.log2(p))
     counter = Counter(string)
+    optimal_len = lambda p: math.ceil(math.log2(p))
     code_len = {key: optimal_len(len(string)/tot) for key, tot in counter.items()}
     return reduce(lambda s, x: s + x[1] * code_len[x[0]], counter.items(), 0)
     
-
-markov = markov_chain(0.2, 0.2, 19600)
-code = runlength(markov)
-print(code)
-print(code.size)
-code_len = optimal_bin_code(code)
-print(code_len)
