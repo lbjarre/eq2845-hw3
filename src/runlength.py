@@ -1,40 +1,40 @@
 #!/usr/bin/env python3
 
 import math
-from itertools import groupby
+from functools import reduce
+from collections import Counter
 import numpy as np
+from markov_source import markov_chain
 
 
-def markov_chain(a, b, size):
-    rnd = np.random.rand(size)
-    string = np.zeros(size)
-    string[0] = 0 if rnd[0] <= b/(a+b) else 1
-    for i in range(1, size):
-        if string[i-1] == 0:
-            string[i] = 1 if rnd[i] <= a else 0
-        else:
-            string[i] = 0 if rnd[i] <= b else 1
-    return string
-
-
-def runlength_code(string):
+def runlength(string):
 
     def runlength_generator(string):
-        s_prev = None
-        counter = 1
+        s_prev = string[0]
+        counter = 0
         for s in string:
             if s == s_prev:
                 counter += 1
             else:
-                yield counter
+                yield s_prev, counter
                 counter = 1 
                 s_prev = s
 
-    ret_array = np.array(string[0])
-    ret_array = np.append(ret_array, [l for l in runlength_generator(string)])
+    ret_array = np.array([])
+    for char, length in runlength_generator(string):
+        ret_array = np.append(ret_array, [char, length])
     return ret_array
 
+def optimal_bin_code(string):
+    optimal_len = lambda p: math.ceil(math.log2(p))
+    counter = Counter(string)
+    code_len = {key: optimal_len(len(string)/tot) for key, tot in counter.items()}
+    return reduce(lambda s, x: s + x[1] * code_len[x[0]], counter.items(), 0)
+    
+
 markov = markov_chain(0.2, 0.2, 19600)
-code = runlength_code(markov)
+code = runlength(markov)
 print(code)
 print(code.size)
+code_len = optimal_bin_code(code)
+print(code_len)
