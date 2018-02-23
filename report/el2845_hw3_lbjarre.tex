@@ -214,4 +214,45 @@ Code for the implementation can be found in the appendix.
 
 \section{Q2: Run-length coding}
 
+\subsection{Implement run-length values converter}
+Code can be found in the appendix.
+
+\subsection{Optimal encoder}
+For the optimal encoder I assumed that each symbol in the run-length code would have
+a codeword length of $\ceil{\log \frac{1}{p_i}}$.
+The probability of each symbol used is the statistical estimate based on the run-length code.
+The code for the implementation can be found in the appendix.
+
+\subsection{Optimal run-length encoding of Markov source}
+\Cref{fig:optimalcompr} show the compression rate for the optimal encoder for the range of $\alpha$-values,
+together with the $\pm\sigma$ ranges generated from running the setup with 15 different radom seeds.
+We can see that for many of $\alpha \geq 0.2$ we actually have a compression ratio smaller than 1,
+i.e. the source string was shorter than the compressed one.
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics{../tikz/compression_optimal/optimal_run_length.pdf}
+  \caption{Optimal compression $\pm\sigma$ of the run-length code for different values of $\alpha$.}
+  \label{fig:optimalcompr}
+\end{figure}
+
+\Cref{fig:pmf} plots the statistically measured PMF of the run-length code of the Markov source
+for different values of $\alpha$.
+The graph is cut short at $x=8$ for increased resolution at the more interesting parts,
+but the PMFs continue on for quite long after it with low probabilities
+(in the most extreme case to $x=189$ for $\alpha=0.05$).
+We can see that the PMF resemble geometric distributions except for the first two values.
+This can be explained by the run-length labels that are placed into the code:
+for each run-length block the code is placing both the run-length value and the symbol.
+Since 1 is used as both a run-length value and a symbol it is more frequently used in the code,
+and have therefore a higher probability.
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics{../tikz/runlength_pmf/runlength_pmf.pdf}
+  \caption{PMF of the run-length code symbols for different values of $\alpha$.}
+  \label{fig:pmf}
+\end{figure}
+
+
 \end{document}
