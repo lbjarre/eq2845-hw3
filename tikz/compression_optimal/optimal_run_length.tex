@@ -1,0 +1,50 @@
+\documentclass{standalone}
+
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+\usetikzlibrary{intersections}
+\usepgfplotslibrary{fillbetween}
+
+\pgfplotsset{compat=1.13}
+
+\newcommand{\csvfile}{../../data/optimal.csv}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{axis}[
+    width=15cm,
+    height=8cm,
+    xmin=0,
+    xmax=1,
+    xlabel=$\alpha$,
+    ylabel=Compression ratio
+  ]
+    \addplot[
+      color=blue,
+      mark=none
+    ] table[x=alpha, y=mean, col sep=comma] {\csvfile};
+    \addplot[
+      name path=stdp,
+      color=blue,
+      mark=none
+    ] table[x=alpha, y expr=\thisrowno{1} + \thisrowno{2}, col sep=comma] {\csvfile};
+    \addplot[
+      name path=stdn,
+      color=blue,
+      mark=none
+    ] table[x=alpha, y expr=\thisrowno{1} - \thisrowno{2}, col sep=comma] {\csvfile};
+    \addplot[
+      color=blue,
+      fill opacity=0.3
+    ]fill between[of=stdp and stdn];
+  \end{axis}
+\end{tikzpicture}
+
+\end{document}
