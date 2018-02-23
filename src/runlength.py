@@ -23,9 +23,22 @@ def runlength(string):
         ret_array = np.append(ret_array, [char, length])
     return ret_array
 
-def optimal_bin_code(string):
+def optimal_encoder(string):
     counter = Counter(string)
-    optimal_len = lambda p: math.ceil(math.log2(p))
-    code_len = {key: optimal_len(len(string)/tot) for key, tot in counter.items()}
-    return reduce(lambda s, x: s + x[1] * code_len[x[0]], counter.items(), 0)
+    str_len = len(string)
+    pdf = dict(map(
+        lambda kv: (kv[0], kv[1]/str_len),
+        counter.items()
+    ))
+    optimal_lens = dict(map(
+        lambda kv: (kv[0], math.floor(math.log2(1/kv[1]))),
+        pdf.items()
+    ))
+    tot_len = reduce(
+        lambda acc, kv: acc + kv[1] * optimal_lens[kv[0]],
+        counter.items(),
+        0
+    )
+
+    return tot_len, pdf
     
