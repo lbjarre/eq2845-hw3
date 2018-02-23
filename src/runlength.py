@@ -31,7 +31,7 @@ def optimal_encoder(string):
         counter.items()
     ))
     optimal_lens = dict(map(
-        lambda kv: (kv[0], math.floor(math.log2(1/kv[1]))),
+        lambda kv: (kv[0], math.ceil(math.log2(1/kv[1]))),
         pdf.items()
     ))
     tot_len = reduce(
