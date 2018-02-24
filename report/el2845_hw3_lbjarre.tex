@@ -218,22 +218,23 @@ Code for the implementation can be found in the appendix.
 Code can be found in the appendix.
 
 \subsection{Optimal encoder}
-For the optimal encoder I assumed that each symbol in the run-length code would have
-a codeword length of $\ceil{\log \frac{1}{p_i}}$.
+For this I implemented both conversions to the theoretical optimal codeword lengths
+$\log\frac{1}{p_i}$ and the slightly more realistic Shannon codeword lengths
+$\ceil{\log\frac{1}{p_i}}$
 The probability of each symbol used is the statistical estimate based on the run-length code.
-The code for the implementation can be found in the appendix.
 
 \subsection{Optimal run-length encoding of Markov source}
-\Cref{fig:optimalcompr} show the compression rate for the optimal encoder for the range of $\alpha$-values,
+\Cref{fig:comprratio} show the compression rate for the different encoders
+in the specified range of $\alpha$-values,
 together with the $\pm\sigma$ ranges generated from running the setup with 15 different radom seeds.
-We can see that for many of $\alpha \geq 0.2$ we actually have a compression ratio smaller than 1,
-i.e. the source string was shorter than the compressed one.
-
+We can see that the optimal codeword lenghts always produces better results than the Shannon codeword lengths.
+Furhtermore we can see that all the encoders perform poor for most of the $\alpha$ values,
+since all produce a compression ratio of less than 1 before $\alpha = 0.2$.
 \begin{figure}[!ht]
   \centering
   \includegraphics{../tikz/compression_optimal/optimal_run_length.pdf}
-  \caption{Optimal compression $\pm\sigma$ of the run-length code for different values of $\alpha$.}
-  \label{fig:optimalcompr}
+  \caption{Compression ratios $\pm\sigma$ of the run-length code for different values of $\alpha$.}
+  \label{fig:comprratio}
 \end{figure}
 
 \Cref{fig:pmf} plots the statistically measured PMF of the run-length code of the Markov source
@@ -253,6 +254,9 @@ and have therefore a higher probability.
   \caption{PMF of the run-length code symbols for different values of $\alpha$.}
   \label{fig:pmf}
 \end{figure}
+
+\section{Q3: Golomb encoder}
+
 
 
 \end{document}
