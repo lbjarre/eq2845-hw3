@@ -13,7 +13,9 @@
 
 \pgfplotsset{compat=1.13}
 
-\newcommand{\csvfile}{../../data/optimal.csv}
+\newcommand{\csvfileopt}{../../data/optimal.csv}
+\newcommand{\csvfilesha}{../../data/shannon.csv}
+\newcommand{\csvfilegol}{../../data/golomb.csv}
 
 \begin{document}
 
@@ -24,26 +26,83 @@
     xmin=0,
     xmax=1,
     xlabel=$\alpha$,
-    ylabel=Compression ratio
+    ylabel=Compression ratio,
+    legend cell align=left
   ]
     \addplot[
       color=blue,
       mark=none
-    ] table[x=alpha, y=mean, col sep=comma] {\csvfile};
+    ] table[x=alpha, y=mean, col sep=comma] {\csvfileopt};
     \addplot[
+      forget plot,
       name path=stdp,
       color=blue,
       mark=none
-    ] table[x=alpha, y expr=\thisrowno{1} + \thisrowno{2}, col sep=comma] {\csvfile};
+    ] table[x=alpha, y expr=\thisrowno{1} + \thisrowno{2}, col sep=comma] {\csvfileopt};
     \addplot[
+      forget plot,
       name path=stdn,
       color=blue,
       mark=none
-    ] table[x=alpha, y expr=\thisrowno{1} - \thisrowno{2}, col sep=comma] {\csvfile};
+    ] table[x=alpha, y expr=\thisrowno{1} - \thisrowno{2}, col sep=comma] {\csvfileopt};
     \addplot[
+      forget plot,
       color=blue,
       fill opacity=0.3
     ]fill between[of=stdp and stdn];
+
+    \addplot[
+      color=blue!50!red,
+      mark=none
+    ]
+    table[x=alpha, y=mean, col sep=comma] {\csvfilesha};
+    \addplot[
+      forget plot,
+      name path=stdpsha,
+      color=blue!50!red,
+      mark=none
+    ] table[x=alpha, y expr=\thisrowno{1} + \thisrowno{2}, col sep=comma] {\csvfilesha};
+    \addplot[
+      forget plot,
+      name path=stdnsha,
+      color=blue!50!red,
+      mark=none
+    ] table[x=alpha, y expr=\thisrowno{1} - \thisrowno{2}, col sep=comma] {\csvfilesha};
+    \addplot[
+      forget plot,
+      color=blue!50!red,
+      fill opacity=0.3
+    ]fill between[of=stdpsha and stdnsha];
+
+    \addplot[
+      color=green!50!red,
+      mark=none
+    ]
+    table[x=alpha, y=mean, col sep=comma] {\csvfilegol};
+    \addplot[
+      forget plot,
+      name path=stdpsha,
+      color=green!50!red,
+      mark=none
+    ] table[x=alpha, y expr=\thisrowno{1} + \thisrowno{2}, col sep=comma] {\csvfilegol};
+    \addplot[
+      forget plot,
+      name path=stdnsha,
+      color=green!50!red,
+      mark=none
+    ] table[x=alpha, y expr=\thisrowno{1} - \thisrowno{2}, col sep=comma] {\csvfilegol};
+    \addplot[
+      forget plot,
+      color=green!50!red,
+      fill opacity=0.3
+    ]fill between[of=stdpsha and stdnsha];
+    
+    \legend{
+      Run-length encoder, optimal codeword lengths \\
+      Run-length encoder, Shannon codeword lengths \\
+      Run-length encoder + Adaptive Golomb encoder \\
+    }
+
   \end{axis}
 \end{tikzpicture}
 
