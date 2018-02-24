@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
 import math
-import numpy as np
 
-from markov_source import markov_chain
 from runlength import runlength
 
-def golomb(string):
+def golomb_encoder(string):
 
     encoded = ''
 
@@ -14,7 +12,7 @@ def golomb(string):
     avg_estimate = 10
     n_max = 100
 
-    for i, s in enumerate(string):
+    for i, s in enumerate(runlength(string)):
         s = int(s)
         k = max(0, math.ceil(math.log2(avg_estimate/(2*n))))
         unary = math.floor(s/2**k)
@@ -28,11 +26,5 @@ def golomb(string):
         avg_estimate += s
         n += 1
     
-    return encoded
+    return encoded, len(encoded)
 
-source_len = 19400
-
-source = markov_chain(0.05, 0.05, source_len)
-source_runlength = runlength(source)
-encoded = golomb(source_runlength)
-print(source_len / len(encoded))

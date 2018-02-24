@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 
 import math
-import ctypes
 
-from markov_source import markov_chain
-
-
-def arithmetic(string, p0):
+def arithmetic_encoder(string, p0):
     
     encoded = ''
 
     N = 22
     P = 8
+    
     p0 = math.floor(p0 * 2**P)
+    mod_mask = 2**(N + P) - 1
 
     C = 0
-    A = int(2**N)
+    A = 2**N
     r = -1
     b = 0
 
@@ -26,7 +24,7 @@ def arithmetic(string, p0):
             T = (A << P) - T
 
         if C >= 2**(N + P):
-            C = int(C) & (2**(N + P) - 1)
+            C = C & mod_mask
             encoded += '1'
             if r > 0:
                 encoded += '0' * (r - 1)
@@ -36,10 +34,10 @@ def arithmetic(string, p0):
 
         while T < 2**(N + P - 1):
             b += 1
-            T = 2 * T
-            C = 2 * C
+            T = T << 1
+            C = C << 1
             if C >= 2**(N + P):
-                C = int(C) & (2**(N + P) - 1)
+                C = C & mod_mask
                 if r < 0:
                     encoded += '1'
                 else:
@@ -49,16 +47,13 @@ def arithmetic(string, p0):
                     encoded += '0' + '1' * r
                 r = 0
 
-        A = math.floor(T * 2**(-P))
+        A = math.floor(T >> P)
     
     if r >= 0:
         encoded += '0' + '1' * r
 
-    encoded += '{:b}'.format(int(C))[-(N + P):]
+    encoded += '{:b}'.format(C)[-(N + P):]
     
-    return encoded
+    return encoded, len(encoded)
 
-source = markov_chain(0.8, 0.8, 19600)
-encoded = arithmetic(source, 0.5)
-print(len(source) / len(encoded))
 
