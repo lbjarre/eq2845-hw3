@@ -1,0 +1,81 @@
+\documentclass{standalone}
+
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+\usetikzlibrary{intersections}
+\usepgfplotslibrary{fillbetween}
+
+\pgfplotsset{compat=1.13}
+
+\newcommand{\csvfile}{../../data/entropy.csv}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{axis}[
+    width=15cm,
+    height=8cm,
+    xmin=0,
+    xmax=1,
+    xlabel=$\alpha$,
+    ylabel=Entropy,
+    legend cell align=left,
+    legend pos=south east
+  ]
+    \addplot[
+      color=blue,
+      mark=none
+    ] table[x=alpha, y=s_mean, col sep=comma] {\csvfile};
+    \addplot[
+      forget plot,
+      name path=stdp,
+      color=blue,
+      mark=none
+    ] table[x=alpha, y expr=\thisrowno{1} + \thisrowno{2}, col sep=comma] {\csvfile};
+    \addplot[
+      forget plot,
+      name path=stdn,
+      color=blue,
+      mark=none
+    ] table[x=alpha, y expr=\thisrowno{1} - \thisrowno{2}, col sep=comma] {\csvfile};
+    \addplot[
+      forget plot,
+      color=blue,
+      fill opacity=0.3
+    ]fill between[of=stdp and stdn];
+    \addplot[
+      color=red,
+      mark=none
+    ] table[x=alpha, y=c_mean, col sep=comma] {\csvfile};
+    \addplot[
+      forget plot,
+      name path=stdp,
+      color=red,
+      mark=none
+    ] table[x=alpha, y expr=\thisrowno{3} + \thisrowno{4}, col sep=comma] {\csvfile};
+    \addplot[
+      forget plot,
+      name path=stdn,
+      color=red,
+      mark=none
+    ] table[x=alpha, y expr=\thisrowno{3} - \thisrowno{4}, col sep=comma] {\csvfile};
+    \addplot[
+      forget plot,
+      color=red,
+      fill opacity=0.3
+    ]fill between[of=stdp and stdn];
+    \legend{
+      Source\\
+      Code\\
+    }
+
+  \end{axis}
+\end{tikzpicture}
+
+\end{document}

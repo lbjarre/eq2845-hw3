@@ -16,6 +16,7 @@
 \newcommand{\csvfileopt}{../../data/optimal.csv}
 \newcommand{\csvfilesha}{../../data/shannon.csv}
 \newcommand{\csvfilegol}{../../data/golomb.csv}
+\newcommand{\csvfileari}{../../data/arithmetic.csv}
 
 \begin{document}
 
@@ -97,10 +98,33 @@
       fill opacity=0.3
     ]fill between[of=stdpsha and stdnsha];
     
+    \addplot[
+      color=green!50!blue,
+      mark=none
+    ]
+    table[x=alpha, y=mean, col sep=comma] {\csvfileari};
+    \addplot[
+      forget plot,
+      name path=stdpsha,
+      color=green!50!blue,
+      mark=none
+    ] table[x=alpha, y expr=\thisrowno{1} + \thisrowno{2}, col sep=comma] {\csvfileari};
+    \addplot[
+      forget plot,
+      name path=stdnsha,
+      color=green!50!blue,
+      mark=none
+    ] table[x=alpha, y expr=\thisrowno{1} - \thisrowno{2}, col sep=comma] {\csvfileari};
+    \addplot[
+      forget plot,
+      color=green!50!blue,
+      fill opacity=0.3
+    ]fill between[of=stdpsha and stdnsha];
     \legend{
       Run-length encoder, optimal codeword lengths \\
       Run-length encoder, Shannon codeword lengths \\
       Run-length encoder + Adaptive Golomb encoder \\
+      Arithmetic encoder \\
     }
 
   \end{axis}
