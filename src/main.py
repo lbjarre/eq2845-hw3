@@ -9,14 +9,14 @@ from markov_source import markov_chain
 from runlength import runlength, estimate_pmf
 from optimals import optimal_encoder, shannon_encoder
 from golomb import golomb_encoder
-from arithmetic import arithmetic_encoder
+from arithmetic import arithmetic_encoder_markov
 
 
 ENCODER_STR_FUNC_MAP = {
     'optimal': optimal_encoder,
     'shannon': shannon_encoder,
     'golomb': golomb_encoder,
-    'arithmetic': arithmetic_encoder
+    'arithmetic': arithmetic_encoder_markov
 }
 
 DATA_FILE_MAP = {
@@ -76,7 +76,7 @@ def calc_compr_ratio(encoder, filename):
         np.random.seed(seed)
         for i, a in enumerate(alphas):
             source = markov_chain(a, a, SOURCE_LEN)
-            _, code_len = encoder(source)
+            _, code_len = encoder(source, a)
             compr_ratios[i, seed] = SOURCE_LEN / code_len
 
     compr_mean = np.mean(compr_ratios, axis=1)

@@ -4,7 +4,7 @@ import math
 
 from runlength import runlength
 
-def golomb_encoder(string):
+def golomb_encoder(string, a):
 
     encoded = ''
 

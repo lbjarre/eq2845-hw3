@@ -6,8 +6,7 @@ from collections import Counter
 
 from runlength import runlength, estimate_pmf
 
-def optimal_encoder(string):
-    
+def optimal_encoder(string, a):
     string = runlength(string)
     pmf = estimate_pmf(string)
     symb_len_optimal = {symb: math.log2(1 / prob) for symb, prob in pmf.items()}
@@ -18,8 +17,7 @@ def optimal_encoder(string):
     )
     return None, code_len
 
-def shannon_encoder(string):
-    
+def shannon_encoder(string, a):
     string = runlength(string)
     pmf = estimate_pmf(string)
     symb_len_shannon = {symb: math.ceil(math.log2(1 / prob)) for symb, prob in pmf.items()}
